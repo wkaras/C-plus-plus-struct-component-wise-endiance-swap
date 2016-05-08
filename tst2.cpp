@@ -17,16 +17,18 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-// Test code for end_swap() templated functions.
+// Test code for end_swap() templated functions (based on composite_op.h).
 
-#include "end_swap.h"
+#include "end_swap2.h"
 
 #include <iostream>
 #include <cstring>
 
-END_SWAP_STRUCT(A)
+COMPOSITE_OP_CLASS(A)
   {
     END_SWAP_TYPES
+
+  public:
 
     u8 f1;
 
@@ -47,6 +49,8 @@ END_SWAP_STRUCT(A)
       }
   };
 
+COMPOSITE_OP(A, End_swap_impl)
+
 using std::cout;
 
 void dump(const A<> &a)
@@ -59,16 +63,20 @@ void dump(const A<> &a)
     cout << "f3=0x" << a.f3 << '\n';
   }
 
-END_SWAP_STRUCT(B) : public END_SWAP_SUB(A)
+COMPOSITE_OP_CLASS(B) : public COMPOSITE_OP_SUB(A)
   {
     END_SWAP_TYPES
 
-    END_SWAP_SUB(A) mbr_a;
+  public:
+
+    COMPOSITE_OP_SUB(A) mbr_a;
 
     u64 f4;
 
     B() { f4 = 0x6789abcdef012345UL; }
   };
+
+COMPOSITE_OP(B, End_swap_impl)
 
 void dump(const B<> &b)
   {

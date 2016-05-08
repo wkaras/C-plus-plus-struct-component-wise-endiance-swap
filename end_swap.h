@@ -38,7 +38,10 @@ inline void end_swap(void *dest, const void *src)
   }
 
 template <>
-inline void end_swap<1>(void *, const void *) { }
+inline void end_swap<1>(void *dest, const void *src)
+  {
+    * static_cast<char *>(dest) = * static_cast<const char *>(src);
+  }
 
 template <>
 inline void end_swap<0>(void *, const void *) { }
